@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简约时钟</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+        
+        .clock-container {
+            text-align: center;
+            position: relative;
+        }
+        
+        .clock {
+            font-size: 6rem;
+            font-weight: 300;
+            letter-spacing: 5px;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .welcome {
+            font-size: 2rem;
+            margin-top: 2rem;
+            opacity: 0;
+            animation: fadeIn 2s ease-in-out forwards;
+            animation-delay: 1s;
+        }
+        
+        .colon {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 添加一些简单的装饰元素 */
+        .decoration {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.5);
+            animation: twinkle 3s infinite alternate;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.2; }
+            100% { opacity: 0.8; }
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .clock {
+                font-size: 4rem;
+                letter-spacing: 3px;
+            }
+            
+            .welcome {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .clock {
+                font-size: 3rem;
+                letter-spacing: 2px;
+            }
+            
+            .welcome {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="clock-container">
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="welcome">陈牛逼欢迎您的到来</div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            
+            // 获取时间
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            
+            // 格式化为两位数
+            hours = hours.toString().padStart(2, '0');
+            minutes = minutes.toString().padStart(2, '0');
+            seconds = seconds.toString().padStart(2, '0');
+            
+            // 更新时钟显示
+            document.getElementById('clock').innerHTML = 
+                `${hours}<span class="colon">:</span>${minutes}<span class="colon">:</span>${seconds}`;
+        }
+        
+        // 创建装饰元素
+        function createDecorations() {
+            const container = document.querySelector('.clock-container');
+            for (let i = 0; i < 20; i++) {
+                const decoration = document.createElement('div');
+                decoration.classList.add('decoration');
+                
+                // 随机位置
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                decoration.style.left = `${left}%`;
+                decoration.style.top = `${top}%`;
+                
+                // 随机大小
+                const size = Math.random() * 3 + 1;
+                decoration.style.width = `${size}px`;
+                decoration.style.height = `${size}px`;
+                
+                // 随机动画延迟
+                decoration.style.animationDelay = `${Math.random() * 3}s`;
+                
+                container.appendChild(decoration);
+            }
+        }
+        
+        // 初始加载时更新时钟
+        updateClock();
+        
+        // 每秒更新一次时钟
+        setInterval(updateClock, 1000);
+        
+        // 创建装饰元素
+        createDecorations();
+    </script>
+</body>
+</html>
